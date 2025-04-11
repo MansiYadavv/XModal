@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './XModal.css';
+import './xmodal.css';
 
 const XModal = () => {
   const [showModal, setShowModal] = useState(false);
@@ -52,7 +52,7 @@ const XModal = () => {
   return (
     <>
       {/* White box containing heading + button */}
-      <div className="modal-box">
+      <div className="modal-box" >
         <h2>User Details Modal</h2>
         <button onClick={handleOpen} className="open-button">
           Open Form

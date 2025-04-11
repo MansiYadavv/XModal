@@ -1,8 +1,19 @@
-/* Modal overlay */
-
-
-
-.modal-box {
+/* Modal overlay (background) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  /* Centered modal box */
+  .modal-box {
     background-color: #fff;
     padding: 30px 40px;
     border-radius: 8px;
@@ -17,47 +28,16 @@
     font-family: Arial, sans-serif;
   }
   
-
-
-
-
-
-
-
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100vw;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-  }
-  
-  /* Modal box */
-  .modal-content {
-    background-color: #ffffff;
-    padding: 30px 25px;
-    border-radius: 8px;
-    width: 100%;
-    max-width: 400px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    font-family: Arial, sans-serif;
-  }
   
   /* Modal heading */
-  .modal-content h2 {
+  .modal-box h2 {
     font-size: 22px;
     margin-bottom: 20px;
     color: #222;
   }
   
-  /* Form elements */
-  form label {
+  /* Form labels and inputs */
+  .modal-box form label {
     display: block;
     margin: 10px 0 5px;
     text-align: left;
@@ -66,7 +46,7 @@
     color: #333;
   }
   
-  form input {
+  .modal-box form input {
     width: 100%;
     padding: 10px;
     font-size: 14px;
@@ -75,13 +55,13 @@
     margin-bottom: 15px;
   }
   
-  form input:focus {
+  .modal-box form input:focus {
     border-color: #007bff;
     outline: none;
   }
   
-  /* Blue submit button */
-  .submit-button {
+  /* Submit button */
+  .modal-box button[type="submit"] {
     background-color: #007bff;
     color: white;
     border: none;
@@ -93,7 +73,7 @@
     cursor: pointer;
   }
   
-  .submit-button:hover {
+  .modal-box button[type="submit"]:hover {
     background-color: #0056b3;
   }
   
@@ -113,9 +93,9 @@
     background-color: #0056b3;
   }
   
-  /* Optional: Responsive */
+  /* Responsive modal */
   @media (max-width: 500px) {
-    .modal-content {
+    .modal-box {
       margin: 0 15px;
       width: calc(100% - 30px);
     }

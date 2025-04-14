@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import "./xmodal.css";
+import "./xmodal.css"; // Ensure this has styles for .modal, .modal-content, etc.
 
 const XModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,48 +13,51 @@ const XModal = () => {
   const modalRef = useRef();
 
   const handleOpen = () => setIsOpen(true);
-  const handleClose = () => setIsOpen(false);
+  const handleClose = () => {
+    setIsOpen(false);
+    setFormData({ username: "", email: "", phone: "", dob: "" });
+  };
+
+  const handleClickOutside = (e) => {
+    if (modalRef.current && !modalRef.current.contains(e.target)) {
+      handleClose();
+    }
+  };
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (isOpen && modalRef.current && !modalRef.current.contains(e.target)) {
-        handleClose();
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const { username, email, phone, dob } = formData;
 
-    // Username validation
     if (!username.trim()) {
       alert("Please fill out this field.");
       return;
     }
 
-    // Email validation
     if (!email.trim()) {
       alert("Please fill out this field.");
       return;
     }
     if (!email.includes("@")) {
-      alert("Please include @ in the email address.");
+      alert("Invalid email. Please check your email address.");
       return;
     }
 
-    // Phone validation
     if (!phone.trim()) {
-      alert("Invalid phone number. Please enter a 10-digit phone number.");
+      alert("Please fill out this field.");
       return;
     }
     if (!/^\d{10}$/.test(phone)) {
@@ -62,15 +65,14 @@ const XModal = () => {
       return;
     }
 
-    // DOB validation
     if (!dob.trim()) {
-      alert("Invalid date of birth. Date of birth cannot be empty.");
+      alert("Please fill out this field.");
       return;
     }
     const enteredDate = new Date(dob);
     const currentDate = new Date();
     if (enteredDate > currentDate) {
-      alert("Invalid date of birth. Date of birth cannot be in the future.");
+      alert("Invalid phone number. Please enter a 10-digit phone number.");
       return;
     }
 
@@ -82,66 +84,62 @@ const XModal = () => {
     <div>
       <div className="button-container">
         <h2>User Details Modal</h2>
-        <button onClick={handleOpen} className="open-button">
-          Open Form
-        </button>
+        <button onClick={handleOpen}>Open Form</button>
       </div>
 
       {isOpen && (
-        <div className="modal-overlay">
-          <div className="modal" ref={modalRef}>
-            <div className="modal-content">
-              <h2>Fill Details</h2>
-              <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <label htmlFor="username">Username:</label>
-                  <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    value={formData.username}
-                    onChange={handleChange}
-                  />
-                </div>
+        <div className="modal">
+          <div className="modal-content" ref={modalRef}>
+            <h2>Fill Details</h2>
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="username">Username:</label>
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                />
+              </div>
 
-                <div className="form-group">
-                  <label htmlFor="email">Email Address:</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                  />
-                </div>
+              <div className="form-group">
+                <label htmlFor="email">Email Address:</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </div>
 
-                <div className="form-group">
-                  <label htmlFor="phone">Phone Number:</label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                  />
-                </div>
+              <div className="form-group">
+                <label htmlFor="phone">Phone Number:</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                />
+              </div>
 
-                <div className="form-group">
-                  <label htmlFor="dob">Date of Birth:</label>
-                  <input
-                    type="date"
-                    id="dob"
-                    name="dob"
-                    value={formData.dob}
-                    onChange={handleChange}
-                  />
-                </div>
+              <div className="form-group">
+                <label htmlFor="dob">Date of Birth:</label>
+                <input
+                  type="date"
+                  id="dob"
+                  name="dob"
+                  value={formData.dob}
+                  onChange={handleChange}
+                />
+              </div>
 
-                <button type="submit" className="submit-button">
-                  Submit
-                </button>
-              </form>
-            </div>
+              <button type="submit" className="submit-button">
+                Submit
+              </button>
+            </form>
           </div>
         </div>
       )}

@@ -36,11 +36,13 @@ const XModal = () => {
     e.preventDefault();
     const { username, email, phone, dob } = formData;
 
+    // Username validation
     if (!username.trim()) {
       alert("Please fill out this field.");
       return;
     }
 
+    // Email validation
     if (!email.trim()) {
       alert("Please fill out this field.");
       return;
@@ -51,25 +53,29 @@ const XModal = () => {
       return;
     }
 
+    // Phone validation - Check format before emptiness
+    if (phone.trim() && !/^\d{10}$/.test(phone)) {
+      alert("Invalid phone number. Please enter a 10-digit phone number.");
+      return;
+    }
+
     if (!phone.trim()) {
       alert("Please fill out this field.");
       return;
     }
 
-    if (!/^\d{10}$/.test(phone)) {
-      alert("Invalid phone number. Please enter a 10-digit phone number.");
-      return;
+    // DOB validation - Check future date before emptiness
+    if (dob.trim()) {
+      const enteredDate = new Date(dob);
+      const currentDate = new Date();
+      if (enteredDate > currentDate) {
+        alert("Invalid date of birth. Date of birth cannot be in the future.");
+        return;
+      }
     }
 
     if (!dob.trim()) {
       alert("Please fill out this field.");
-      return;
-    }
-
-    const enteredDate = new Date(dob);
-    const currentDate = new Date();
-    if (enteredDate > currentDate) {
-      alert("Invalid date of birth. Date of birth cannot be in the future.");
       return;
     }
 

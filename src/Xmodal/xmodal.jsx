@@ -21,7 +21,7 @@ const XModal = () => {
         handleClose();
       }
     };
-    
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -47,35 +47,30 @@ const XModal = () => {
       alert("Please fill out this field.");
       return;
     }
-
     if (!email.includes("@")) {
       alert("Please include @ in the email address.");
       return;
     }
 
-    // Phone validation - Check format before emptiness
-    if (phone.trim() && !/^\d{10}$/.test(phone)) {
+    // Phone validation
+    if (!phone.trim()) {
+      alert("Invalid phone number. Please enter a 10-digit phone number.");
+      return;
+    }
+    if (!/^\d{10}$/.test(phone)) {
       alert("Invalid phone number. Please enter a 10-digit phone number.");
       return;
     }
 
-    if (!phone.trim()) {
-      alert("Please fill out this field.");
+    // DOB validation
+    if (!dob.trim()) {
+      alert("Invalid date of birth. Date of birth cannot be empty.");
       return;
     }
-
-    // DOB validation - Check future date before emptiness
-    if (dob.trim()) {
-      const enteredDate = new Date(dob);
-      const currentDate = new Date();
-      if (enteredDate > currentDate) {
-        alert("Invalid date of birth. Date of birth cannot be in the future.");
-        return;
-      }
-    }
-
-    if (!dob.trim()) {
-      alert("Please fill out this field.");
+    const enteredDate = new Date(dob);
+    const currentDate = new Date();
+    if (enteredDate > currentDate) {
+      alert("Invalid date of birth. Date of birth cannot be in the future.");
       return;
     }
 
@@ -108,7 +103,7 @@ const XModal = () => {
                     onChange={handleChange}
                   />
                 </div>
-                
+
                 <div className="form-group">
                   <label htmlFor="email">Email Address:</label>
                   <input
@@ -119,7 +114,7 @@ const XModal = () => {
                     onChange={handleChange}
                   />
                 </div>
-                
+
                 <div className="form-group">
                   <label htmlFor="phone">Phone Number:</label>
                   <input
@@ -130,7 +125,7 @@ const XModal = () => {
                     onChange={handleChange}
                   />
                 </div>
-                
+
                 <div className="form-group">
                   <label htmlFor="dob">Date of Birth:</label>
                   <input
@@ -141,8 +136,10 @@ const XModal = () => {
                     onChange={handleChange}
                   />
                 </div>
-                
-                <button type="submit" className="submit-button">Submit</button>
+
+                <button type="submit" className="submit-button">
+                  Submit
+                </button>
               </form>
             </div>
           </div>

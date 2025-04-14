@@ -17,13 +17,12 @@ const XModal = () => {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (modalRef.current && !modalRef.current.contains(e.target)) {
+      if (isOpen && modalRef.current && !modalRef.current.contains(e.target)) {
         handleClose();
       }
     };
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
+    
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -79,8 +78,8 @@ const XModal = () => {
   };
 
   return (
-    <div className="app-container">
-      <div className="initial-container">
+    <div>
+      <div className="button-container">
         <h2>User Details Modal</h2>
         <button onClick={handleOpen} className="open-button">
           Open Form
@@ -89,55 +88,57 @@ const XModal = () => {
 
       {isOpen && (
         <div className="modal-overlay">
-          <div className="modal" ref={modalRef} id="modal">
-            <h2>Fill Details</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="username">Username:</label>
-                <input
-                  type="text"
-                  id="username"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleChange}
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="email">Email Address:</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="phone">Phone Number:</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="dob">Date of Birth:</label>
-                <input
-                  type="date"
-                  id="dob"
-                  name="dob"
-                  value={formData.dob}
-                  onChange={handleChange}
-                />
-              </div>
-              
-              <button type="submit" className="submit-button">Submit</button>
-            </form>
+          <div className="modal" ref={modalRef}>
+            <div className="modal-content">
+              <h2>Fill Details</h2>
+              <form onSubmit={handleSubmit}>
+                <div className="form-group">
+                  <label htmlFor="username">Username:</label>
+                  <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label htmlFor="email">Email Address:</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label htmlFor="phone">Phone Number:</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label htmlFor="dob">Date of Birth:</label>
+                  <input
+                    type="date"
+                    id="dob"
+                    name="dob"
+                    value={formData.dob}
+                    onChange={handleChange}
+                  />
+                </div>
+                
+                <button type="submit" className="submit-button">Submit</button>
+              </form>
+            </div>
           </div>
         </div>
       )}

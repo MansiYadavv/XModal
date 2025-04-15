@@ -9,6 +9,12 @@ const XModal = () => {
     phone: "",
     dob: "",
   });
+  const [errors, setErrors] = useState({
+    username: "",
+    email: "",
+    phone: "",
+    dob: "",
+  });
 
   const modalRef = useRef();
 
@@ -16,6 +22,7 @@ const XModal = () => {
   const handleClose = () => {
     setIsOpen(false);
     setFormData({ username: "", email: "", phone: "", dob: "" });
+    setErrors({ username: "", email: "", phone: "", dob: "" });
   };
 
   const handleClickOutside = (e) => {
@@ -36,48 +43,100 @@ const XModal = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    
+    // Clear previous errors when field is edited
+    setErrors(prev => ({ ...prev, [name]: "" }));
+    
+    // Validate as user types
+    if (name === "phone" && value && !/^\d{10}$/.test(value)) {
+      setErrors(prev => ({ ...prev, phone: "Invalid phone number. Please enter a 10-digit phone number." }));
+    }
+    
+    if (name === "dob" && value) {
+      const enteredDate = new Date(value);
+      const currentDate = new Date();
+      if (enteredDate > currentDate) {
+        setErrors(prev => ({ ...prev, dob: "Invalid date of birth. Date cannot be in the future." }));
+      }
+    }
+  };
+
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors = { username: "", email: "", phone: "", dob: "" };
+    
+    if (!formData.username.trim()) {
+      newErrors.username = "Please fill out this field.";
+      isValid = false;
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Please fill out this field.";
+      isValid = false;
+    } else if (!formData.email.includes("@")) {
+      newErrors.email = "Invalid email. Please check your email address.";
+      isValid = false;
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Please fill out this field.";
+      isValid = false;
+    } else if (!/^\d{10}$/.test(formData.phone)) {
+      newErrors.phone = "Invalid phone number. Please enter a 10-digit phone number.";
+      isValid = false;
+    }
+
+    if (!formData.dob.trim()) {
+      newErrors.dob = "Please fill out this field.";
+      isValid = false;
+    } else {
+      const enteredDate = new Date(formData.dob);
+      const currentDate = new Date();
+      if (enteredDate > currentDate) {
+        newErrors.dob = "Invalid date of birth. Date cannot be in the future.";
+        isValid = false;
+      }
+    }
+
+    setErrors(newErrors);
+    return isValid;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { username, email, phone, dob } = formData;
+    
+    if (validateForm()) {
+      alert("Form submitted successfully!");
+      handleClose();
+    } else {
+      // Find the first error and alert it
+      const errorKeys = Object.keys(errors);
+      for (const key of errorKeys) {
+        if (errors[key]) {
+          alert(errors[key]);
+          break;
+        }
+      }
+    }
+  };
 
-    if (!username.trim()) {
-      alert("Please fill out this field.");
-      return;
-    }
-
-    if (!email.trim()) {
-      alert("Please fill out this field.");
-      return;
-    }
-    if (!email.includes("@")) {
-      alert("Invalid email. Please check your email address.");
-      return;
-    }
-
-    if (!phone.trim()) {
-      alert("Please fill out this field.");
-      return;
-    }
-    if (!/^\d{10}$/.test(phone)) {
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    
+    // Validate on blur
+    if (name === "phone" && value && !/^\d{10}$/.test(value)) {
+      setErrors(prev => ({ ...prev, phone: "Invalid phone number. Please enter a 10-digit phone number." }));
       alert("Invalid phone number. Please enter a 10-digit phone number.");
-      return;
     }
-
-    if (!dob.trim()) {
-      alert("Please fill out this field.");
-      return;
+    
+    if (name === "dob" && value) {
+      const enteredDate = new Date(value);
+      const currentDate = new Date();
+      if (enteredDate > currentDate) {
+        setErrors(prev => ({ ...prev, dob: "Invalid date of birth. Date cannot be in the future." }));
+        alert("Invalid date of birth. Date cannot be in the future.");
+      }
     }
-    const enteredDate = new Date(dob);
-    const currentDate = new Date();
-    if (enteredDate > currentDate) {
-      alert("Invalid date of birth. Date cannot be in the future.");
-      return;
-    }
-
-    alert("Form submitted successfully!");
-    handleClose();
   };
 
   return (
@@ -101,6 +160,7 @@ const XModal = () => {
                   value={formData.username}
                   onChange={handleChange}
                 />
+                {errors.username && <div className="error-text">{errors.username}</div>}
               </div>
 
               <div className="form-group">
@@ -112,6 +172,7 @@ const XModal = () => {
                   value={formData.email}
                   onChange={handleChange}
                 />
+                {errors.email && <div className="error-text">{errors.email}</div>}
               </div>
 
               <div className="form-group">
@@ -122,7 +183,9 @@ const XModal = () => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                 />
+                {errors.phone && <div className="error-text">{errors.phone}</div>}
               </div>
 
               <div className="form-group">
@@ -133,7 +196,9 @@ const XModal = () => {
                   name="dob"
                   value={formData.dob}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                 />
+                {errors.dob && <div className="error-text">{errors.dob}</div>}
               </div>
 
               <button type="submit" className="submit-button">

@@ -72,7 +72,7 @@ const XModal = () => {
     const enteredDate = new Date(dob);
     const currentDate = new Date();
     if (enteredDate > currentDate) {
-      alert("Invalid phone number. Please enter a 10-digit phone number.");
+      alert("Invalid date of birth. Date cannot be in the future.");
       return;
     }
 
